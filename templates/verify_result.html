@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verification Result - Certificate System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        
+        .result-card {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 550px;
+            width: 90%;
+            overflow: hidden;
+        }
+        
+        .result-header {
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .result-header.verified {
+            background: linear-gradient(135deg, #6366F1 0%, #6366F1 100%);
+        }
+        
+        .result-header.not-found {
+            background: linear-gradient(135deg, #F87171 0%, #DC2626 100%);
+        }
+        
+        .result-body {
+            padding: 2rem;
+            background-color: white;
+        }
+        
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .result-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-message {
+            opacity: 0.9;
+        }
+        
+        .credential-item {
+            padding: 1rem;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+        
+        .credential-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #F3F4F6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: #6366F1;
+        }
+        
+        .credential-label {
+            font-size: 0.85rem;
+            color: #6B7280;
+            margin-bottom: 0.25rem;
+        }
+        
+        .credential-value {
+            font-weight: 600;
+            color: #111827;
+            font-size: 1.05rem;
+        }
+        
+        .certificate-id {
+            font-family: monospace;
+            letter-spacing: 0.5px;
+        }
+        
+        .certificate-badge {
+            text-align: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .certificate-badge img {
+            max-width: 120px;
+        }
+        
+        .verification-stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 120px;
+            height: 120px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%2310B981' stroke-width='3' stroke-dasharray='5,5' /%3E%3Ctext x='50' y='50' font-size='12' text-anchor='middle' fill='%2310B981' font-family='Arial' font-weight='bold' transform='rotate(-30 50 50)'%3EVERIFIED%3C/text%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.6;
+        }
+        
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .btn-action {
+            border-radius: 50px;
+            padding: 10px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .btn-primary-action {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+        
+        .btn-primary-action:hover {
+            background: linear-gradient(135deg, #5152CC 0%, #7347DB 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+            color: white;
+        }
+        
+        .btn-secondary-action {
+            background: transparent;
+            border: 2px solid #E5E7EB;
+            color: #6B7280;
+        }
+        
+        .btn-secondary-action:hover {
+            background: #F9FAFB;
+            color: #4B5563;
+            border-color: #D1D5DB;
+        }
+        
+        .action-icon {
+            margin-right: 8px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #6B7280;
+            font-weight: 500;
+            text-decoration: none;
+            margin-top: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: #4B5563;
+        }
+        
+        .back-icon {
+            margin-right: 6px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .empty-illustration {
+            max-width: 200px;
+            margin: 0 auto 2rem;
+            opacity: 0.8;
+        }
+        
+        .empty-message {
+            color: #6B7280;
+            margin-bottom: 2rem;
+        }
+        
+        .position-relative {
+            position: relative;
+        }
+        
+        @media (max-width: 576px) {
+            .result-header, .result-body {
+                padding: 1.5rem;
+            }
+            
+            .verification-stamp {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center mb-4">
+                    <a href="/" class="back-link">
+                        <i class="fas fa-arrow-left back-icon"></i> Back to Home
+                    </a>
+                </div>
+
+                {% if cert %}
+                <!-- Certificate Found -->
+                <div class="result-card position-relative">
+                    <div class="verification-stamp"></div>
+                    <div class="result-header verified">
+                        <div class="result-icon">
+                            <i class="fas fa-check-circle fa-3x"></i>
+                        </div>
+                        <h2 class="result-title">Certificate Verified</h2>
+                        <p class="result-message">This certificate is authentic and valid</p>
+                    </div>
+
+                    <div class="result-body">
+                        <div class="credential-item">
+                            <div class="credential-icon"><i class="fas fa-fingerprint"></i></div>
+                            <div>
+                                <div class="credential-label">Certificate ID</div>
+                                <div class="credential-value certificate-id">{{ cert[0] }}</div>
+                            </div>
+                        </div>
+
+                        <div class="credential-item">
+                            <div class="credential-icon"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div class="credential-label">Recipient</div>
+                                <div class="credential-value">{{ cert[1] }}</div>
+                            </div>
+                        </div>
+
+                        <div class="credential-item">
+                            <div class="credential-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <div>
+                                <div class="credential-label">Certification/Course</div>
+                                <div class="credential-value">{{ cert[2] }}</div>
+                            </div>
+                        </div>
+
+                        <div class="credential-item">
+                            <div class="credential-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <div>
+                                <div class="credential-label">Issue Date</div>
+                                <div class="credential-value">{{ cert[3] }}</div>
+                            </div>
+                        </div>
+
+                        <div class="certificate-badge">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%2310B981' stroke-width='3' /%3E%3Cpath d='M38 50 L45 57 L62 40' fill='none' stroke='%2310B981' stroke-width='5' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E" alt="Verified Badge">
+                            <div class="mt-2 text-success fw-bold">Verified Certificate</div>
+                        </div>
+
+                        <div class="actions">
+                            <a href="{{ url_for('download_certificate', cert_id=cert[0]) }}" class="btn-action btn-primary-action">
+                                <i class="fas fa-download action-icon"></i> Download PDF
+                            </a>
+                            <a href="/" class="btn-action btn-secondary-action">
+                                <i class="fas fa-search action-icon"></i> Verify Another
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <!-- Certificate Not Found -->
+                <div class="result-card">
+                    <div class="result-header not-found">
+                        <div class="result-icon">
+                            <i class="fas fa-times-circle fa-3x"></i>
+                        </div>
+                        <h2 class="result-title">Certificate Not Found</h2>
+                        <p class="result-message">We couldn’t verify this certificate. Please check the ID and try again.</p>
+                    </div>
+                    <div class="result-body empty-state">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png" class="empty-illustration" alt="Not Found">
+                        <div class="empty-message">Make sure the Certificate ID is correct.</div>
+                        <a href="/" class="btn-action btn-secondary-action">
+                            <i class="fas fa-arrow-left action-icon"></i> Go Back
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
